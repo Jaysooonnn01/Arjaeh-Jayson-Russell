@@ -209,12 +209,13 @@ function Dashboard() {
             </div>
 
             {/* Dim Overlay */}
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
+            <div className={`fixed inset-0 bg-black bg-opacity-40 z-40`} />
+            <div className={`fixed inset-0 bg-black bg-opacity-50 z-40 ${showOverlay || showUpdateOverlay || showDeleteOverlay ? 'block' : 'hidden'}`} />
 
             {/* User Table Container */}
             <div className="absolute pt-32 top-0 left-0 w-full flex items-center justify-center p-4 z-50">
                 <div className="bg-white bg-opacity-20 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg max-w-3xl w-full">
-                    <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-black text-center">User List</h2>
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 text-white text-center">User List</h2>
 
                     {/* Flex container for buttons */}
                     <div className="flex justify-between mb-4">
@@ -231,25 +232,24 @@ function Dashboard() {
                         </button>
                     </div>
 
-                    {/* User Table */}
                     {loading ? (
-                        <p>Loading...</p>
+                        <p className="text-white text-center">Loading users...</p>
                     ) : (
                         <div className="overflow-x-auto">
-                            <table className="min-w-full bg-white text-black border border-gray-300">
-                                <thead>
+                            <table className="min-w-full bg-gray-800 rounded-lg">
+                                <thead className="bg-gray-800">
                                     <tr>
-                                        <th className="py-2 border-b">Name</th>
-                                        <th className="py-2 border-b">Email</th>
-                                        <th className="py-2 border-b">Actions</th>
+                                        <th className="py-2 px-4 text-left text-white">Name</th>
+                                        <th className="py-2 px-4 text-left text-white">Email</th>
+                                        <th className="py-2 px-4 text-left text-white">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {users.map((user) => (
-                                        <tr key={user.id} className="hover:bg-gray-100 transition duration-200">
-                                            <td className="py-2 border-b">{user.name}</td>
-                                            <td className="py-2 border-b">{user.email}</td>
-                                            <td className="py-2 border-b">
+                                <tbody className="bg-gray-900">
+                                    {users.map(user => (
+                                        <tr key={user.id} className="hover:bg-gray-700 transition duration-200">
+                                            <td className="py-2 px-4 text-white">{user.name}</td>
+                                            <td className="py-2 px-4 text-white">{user.email}</td>
+                                            <td className="py-2 px-4 flex space-x-2">
                                                 <button
                                                     onClick={() => {
                                                         setShowUpdateOverlay(true);
@@ -257,7 +257,7 @@ function Dashboard() {
                                                         setName(user.name);
                                                         setEmail(user.email);
                                                     }}
-                                                    className="text-blue-500 hover:text-blue-700 mr-2"
+                                                    className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 transition duration-200 text-sm sm:text-base"
                                                 >
                                                     Edit
                                                 </button>
@@ -266,7 +266,7 @@ function Dashboard() {
                                                         setShowDeleteOverlay(true);
                                                         setUserToDelete(user.id);
                                                     }}
-                                                    className="text-red-500 hover:text-red-700"
+                                                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-200 text-sm sm:text-base"
                                                 >
                                                     Delete
                                                 </button>
@@ -280,76 +280,106 @@ function Dashboard() {
                 </div>
             </div>
 
-            {/* Overlay for Adding User */}
+            {/* Add User Overlay */}
             {showOverlay && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded shadow-lg">
-                        <h2 className="text-lg font-semibold mb-4">Add User</h2>
+                    <div className="bg-white bg-opacity-20 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg max-w-md w-full">
+                        <h2 className="text-lg sm:text-xl font-semibold text-white mb-4">Add User</h2>
                         <input
                             type="text"
                             placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="border p-2 mb-4 w-full"
+                            className="w-full mb-4 p-2 rounded"
                         />
                         <input
                             type="email"
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="border p-2 mb-4 w-full"
+                            className="w-full mb-4 p-2 rounded"
                         />
                         <input
                             type="password"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="border p-2 mb-4 w-full"
+                            className="w-full mb-4 p-2 rounded"
                         />
-                        <div className="flex justify-between">
-                            <button onClick={closeOverlay} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-                            <button onClick={addUser} className="bg-green-500 text-white px-4 py-2 rounded">Add User</button>
+                        <div className="flex justify-end">
+                            <button
+                                onClick={addUser}
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+                            >
+                                Add
+                            </button>
+                            <button
+                                onClick={closeOverlay}
+                                className="bg-gray-500 text-white px-4 py-2 ml-2 rounded hover:bg-gray-600 transition duration-200"
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* Overlay for Updating User */}
+            {/* Update User Overlay */}
             {showUpdateOverlay && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded shadow-lg">
-                        <h2 className="text-lg font-semibold mb-4">Update User</h2>
+                    <div className="bg-white bg-opacity-20 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg max-w-md w-full">
+                        <h2 className="text-lg sm:text-xl font-semibold text-white mb-4">Update User</h2>
                         <input
                             type="text"
                             placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="border p-2 mb-4 w-full"
+                            className="w-full mb-4 p-2 rounded"
                         />
                         <input
                             type="email"
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="border p-2 mb-4 w-full"
+                            className="w-full mb-4 p-2 rounded"
                         />
-                        <div className="flex justify-between">
-                            <button onClick={closeUpdateOverlay} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-                            <button onClick={updateUser} className="bg-blue-500 text-white px-4 py-2 rounded">Update User</button>
+                        <div className="flex justify-end">
+                            <button
+                                onClick={updateUser}
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+                            >
+                                Update
+                            </button>
+                            <button
+                                onClick={closeUpdateOverlay}
+                                className="bg-gray-500 text-white px-4 py-2 ml-2 rounded hover:bg-gray-600 transition duration-200"
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* Overlay for Deleting User */}
+            {/* Delete User Overlay */}
             {showDeleteOverlay && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded shadow-lg">
-                        <h2 className="text-lg font-semibold mb-4">Delete User</h2>
-                        <p>Are you sure you want to delete this user?</p>
-                        <div className="flex justify-between mt-4">
-                            <button onClick={closeDeleteOverlay} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-                            <button onClick={deleteUser} className="bg-red-500 text-white px-4 py-2 rounded">Delete User</button>
+                    <div className="bg-white bg-opacity-20 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg max-w-md w-full">
+                        <h2 className="text-lg sm:text-xl font-semibold text-white mb-4">Delete User</h2>
+                        <p className="text-white">Are you sure you want to delete this user?</p>
+                        <div className="flex justify-end">
+                            <button
+                                onClick={deleteUser}
+                                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200"
+                            >
+                                Delete
+                            </button>
+                            <button
+                                onClick={closeDeleteOverlay}
+                                className="bg-gray-500 text-white px-4 py-2 ml-2 rounded hover:bg-gray-600 transition duration-200"
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
