@@ -4,12 +4,12 @@ import { motion, AnimatePresence } from "framer-motion"; // For animations
 import { auth } from '../Firebase/Firebase'; // Import your Firebase auth
 import { signInWithEmailAndPassword } from "firebase/auth"; // Import the sign-in function
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
-import JasonLogo from "../Assets/Developers/Jason.png";
+import JaysonLogo from "../Assets/Developers/Jason.png";
 import RussellLogo from "../Assets/Developers/Russell.png";
 import ArjaehLogo from "../Assets/Developers/Arjaeh.png";
 
 // Array of logos
-const logos = [JasonLogo, RussellLogo, ArjaehLogo];
+const logos = [JaysonLogo, RussellLogo, ArjaehLogo];
 
 // Function to get a random logo index
 function getRandomIndex(currentIndex) {
